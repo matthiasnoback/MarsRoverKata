@@ -3,34 +3,44 @@ package mars_rover;
 public class Rover {
     private Position position;
     private Direction direction;
+    private final int maxX;
+    private final int maxY;
+    private ObstacleMap obstacleMap;
 
-    public Rover(Position position, Direction direction) {
+    public Rover(Position position, Direction direction, int maxX, int maxY, ObstacleMap obstacleMap) {
         this.position = position;
         this.direction = direction;
+        this.maxX = maxX;
+        this.maxY = maxY;
+        this.obstacleMap = obstacleMap;
     }
 
-    public Direction turnRight() {
+    public void turnRight() {
         this.direction = direction.clockwiseRight();
-
-        return this.direction;
     }
 
-    public Direction turnLeft() {
+    public void turnLeft() {
         this.direction = direction.clockwiseLeft();
-
-        return this.direction;
     }
 
-    public Position moveForward() {
-        this.position = this.position.nextPosition(this.direction);
+    public void moveForward() {
+        Position nextPosition = this.position.nextPosition(this.direction, this.maxX, this.maxY);
 
-        return this.position;
+        if (this.obstacleMap.hasObstacleAt(nextPosition)) {
+            throw CanNotMoveToPosition.obstacleEncountered(nextPosition);
+        }
+
+        this.position = nextPosition;
     }
 
-    public Position moveBackward() {
-        this.position = this.position.previousPosition(this.direction);
+    public void moveBackward() {
+        Position previousPosition = this.position.previousPosition(this.direction, this.maxX, this.maxY);
 
-        return this.position;
+        if (this.obstacleMap.hasObstacleAt(previousPosition)) {
+            throw CanNotMoveToPosition.obstacleEncountered(previousPosition);
+        }
+
+        this.position = previousPosition;
     }
 
     public Position currentPosition() {

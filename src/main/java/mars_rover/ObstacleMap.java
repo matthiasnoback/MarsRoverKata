@@ -2,7 +2,7 @@ package mars_rover;
 
 import java.util.HashMap;
 
-class Map {
+class ObstacleMap {
     private HashMap<Position, Boolean> obstacles = new HashMap<>();
 
     void registerObstacleAt(Position position) {

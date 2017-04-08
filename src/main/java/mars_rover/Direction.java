@@ -35,4 +35,19 @@ enum Direction {
 
         throw new IllegalArgumentException();
     }
+
+    public Direction opposite() {
+        switch (this) {
+            case NORTH:
+                return SOUTH;
+            case SOUTH:
+                return NORTH;
+            case WEST:
+                return EAST;
+            case EAST:
+                return WEST;
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
 }

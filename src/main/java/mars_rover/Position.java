@@ -2,14 +2,11 @@ package mars_rover;
 
 import java.util.Objects;
 
-import static mars_rover.Direction.*;
-import static mars_rover.Direction.SOUTH;
-
 public class Position {
     private final int x;
     private final int y;
 
-    Position(int x, int y) {
+    private Position(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -38,34 +35,23 @@ public class Position {
                 && ((Position) obj).y == this.y;
     }
 
-    public Position nextPosition(Direction direction) {
+    Position nextPosition(Direction direction, int maxX, int maxY) {
         switch (direction) {
             case NORTH:
-                return this.withY(this.y - 1);
+                return this.withY(this.y > 0 ? this.y - 1 : maxY);
             case EAST:
-                return this.withX(this.x + 1);
+                return this.withX(this.x < maxX ? this.x + 1 : 0);
             case SOUTH:
-                return this.withY(this.y + 1);
+                return this.withY(this.y < maxY ? this.y + 1 : 0);
             case WEST:
-                return this.withX(this.x - 1);
+                return this.withX(this.x > 0 ? this.x - 1 : maxX);
             default:
                 throw new IllegalArgumentException();
         }
     }
 
-    public Position previousPosition(Direction direction) {
-        switch (direction) {
-            case NORTH:
-                return this.withY(this.y + 1);
-            case EAST:
-                return this.withX(this.x - 1);
-            case SOUTH:
-                return this.withY(this.y - 1);
-            case WEST:
-                return this.withX(this.x + 1);
-            default:
-                throw new IllegalArgumentException();
-        }
+    Position previousPosition(Direction direction, int maxX, int maxY) {
+        return this.nextPosition(direction.opposite(), maxX, maxY);
     }
 
     @Override
